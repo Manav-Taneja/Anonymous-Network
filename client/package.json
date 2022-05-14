@@ -56,5 +56,5 @@
     "postcss": "^7.0.35",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.1.0"
   },
-  "proxy": "http://localhost:5000"
+  "proxy": "http://ec2-3-17-138-220.us-east-2.compute.amazonaws.com:5000"
 }
