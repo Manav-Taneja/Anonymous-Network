@@ -6,6 +6,7 @@ import { AuthContext } from '../../State/AuthContext'
 import { useToast } from '@chakra-ui/toast'
 import { ImSpinner2 } from 'react-icons/im'
 import { AiFillHome } from 'react-icons/ai'
+import Popup from '../Popup.Page/Popup'
 const SignUpPage = () => {
   const history = useHistory()
   const toast = useToast()
@@ -16,9 +17,11 @@ const SignUpPage = () => {
   const [email, setEmail] = useState('')
   const [rePassword, setRePassword] = useState('')
   const [fetching, setFetching] = useState(false)
-
-  const logInUser = async(e) => {
-    e.preventDefault()
+  const [openPopup,setOpenPopup]=useState(false);
+  const [disable, setDisable] = React.useState(false);
+  
+  const logInUser = async(event) => {
+    event.preventDefault()
     if(password !== rePassword){
       toast(
         {
@@ -31,9 +34,12 @@ const SignUpPage = () => {
         }
       )
     }else {
-      setFetching(true)
+      setFetching(false)
       console.log("inside this");
       const reRouteUser = await signup(email, password,username)
+      console.log("reroter  "+reRouteUser)
+      setOpenPopup(true)
+      setDisable(true)
       if(reRouteUser){
         toast(
           {
@@ -49,17 +55,17 @@ const SignUpPage = () => {
         history.push('/')
       }
       else {
-        toast(
-          {
-            title: "Login failed",
-            description: "Entered credentials are wrong",
-            status: "error",
-            duration: 3000,
-            isClosable: true,
-            position: "bottom-right"
-          }
-        )
-        setFetching(false)
+        // toast(
+        //   {
+        //     title: "Login failed",
+        //     description: "Entered credentials are wrong",
+        //     status: "error",
+        //     duration: 3000,
+        //     isClosable: true,
+        //     position: "bottom-right"
+        //   }
+        // )
+        // setFetching(false)
       }
     }
 
@@ -78,7 +84,7 @@ const SignUpPage = () => {
         <div className="min-h-screen flex justify-center items-center" style={{"backgroundColor": "#303067"}}>
           <div className=" w-9/12 m-auto ">
             <div className="flex  h-full ">
-              <Link to="/" className="bg-green-flair px-3 mr-2 rounded-sm flex items-center">
+              <Link to="/Login" className="bg-green-flair px-3 mr-2 rounded-sm flex items-center">
                 <AiFillHome className="text-white" />
               </Link>
               <h2 className="text-3xl text-left font-black text-white">Sign Up</h2>
@@ -100,7 +106,9 @@ const SignUpPage = () => {
                 <label  className="text-xs text-gray-100 font-bold pl-2 pb-1 text-left ">Re enter Password</label>
                 <input type="password" value={rePassword} onChange={e => setRePassword(e.target.value)} className=" text-sm flex-g px-3 py-2 text-white h-10 bg-transparent border-gray-400 border rounded-md outline-none focus:ring-1 focus:ring-blue-400 " />
               </div>
-              <button type="submit" className=" focus:outline-none flex items-center justify-center w-full mt-5 py-2 rounded-md duration-300 text-white hover:bg-opacity-90" style={{backgroundColor: "#454DF8"}}>
+              <button  type="submit" className=" focus:outline-none flex items-center justify-center w-full mt-5 py-2 rounded-md duration-300 text-white hover:bg-opacity-90" style={{backgroundColor: "#454DF8"}}
+               disabled={disable}
+              >
               {
                   fetching ? (
                     <>
@@ -110,6 +118,20 @@ const SignUpPage = () => {
                   ) : "Submit"
                 }
               </button>
+                 {/* <button type="submit" className=" focus:outline-none flex items-center justify-center w-full mt-5 py-2 rounded-md duration-300 text-white hover:bg-opacity-90" style={{backgroundColor: "#454DF8"}}
+               onClick={()=>{
+                setOpenPopup(true);
+              }}>
+              {
+                  fetching ? (
+                    <>
+                      <ImSpinner2 className="text-white animate-spin mr-2" />
+                      Submitting
+                    </>
+                  ) : "Submit"
+                }
+              </button> */}
+              {openPopup && <Popup/>}
               <p className="text-left text-xs mt-1 text-white">Already have an account? <Link to="/login" className="text-blue-500" style={{color: "#454DF8"}}> here</Link> </p>
             </form>
           </div>

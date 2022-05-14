@@ -24,7 +24,7 @@ sendEmail:async function(email,code){
         service: 'gmail',
         auth: {
           user: 'testingpurpose262000@gmail.com',
-          pass: 'manav54321'
+          pass: 'Manav@54321'
         }
       });
       

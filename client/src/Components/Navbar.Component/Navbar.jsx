@@ -89,11 +89,11 @@ const Navbar = () => {
                       <h1 className='font-bold text-md py-1 px-4 bg-green-flair text-white rounded-lg'>Login</h1>
                     </Link>
                   </li>
-                  <li className="dark:text-white mx-2 text-black">
+                  {/* <li className="dark:text-white mx-2 text-black">
                     <Link to="/login">
                       <h1 className='font-bold text-md py-1 px-4 bg-green-flair text-white rounded-lg'>Trending</h1>
                     </Link>
-                  </li>
+                  </li> */}
                 </>
               )
           }

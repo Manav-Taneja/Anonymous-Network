@@ -18,33 +18,16 @@ router.post('/signup', async(req, res) => {
   if (!username || !password || !email) return res.status(400).send("Please enter all the fields")
 
   //BCRYPT INITIALISATION
-  var code=await helper.generateCode();
-  console.log(code);
-  helper.sendEmail(email,code);
-  verificationcode=code;
   const salt = await bcrypt.genSalt();
   const passwordHash = await bcrypt.hash(password, salt) //HASHED PASSWORD 
   console.log("PasswordHash   ===== "+passwordHash)
   const signUpUserQuery = await db.query(`INSERT INTO users(username, email, hashedpassword) VALUES ($1, $2, $3) returning id`, [ username, email, passwordHash ])
   console.log("after running query")
-  try{
-    
-    //CREATING & SIGNING A TOKEN TO SEND TO THE FRONTEND
-    const signToken = await jwt.sign(
-      {
-        userID: signUpUserQuery.rows[0].id,
-        username,
-        isAdmin: false
-      },
-      SECRET
-    )
-    console.log("till here yaha tyak agaya")
-    //SENDING COOKIE TO FRONTEND 
-    res.cookie('jwtToken', signToken, { httpOnly: true } ).json({message: "Logged in successfully", logUserIn: true})
-  } catch(err) {
-    res.json({message: err.message})
-  }
-
+  var code=await helper.generateCode();
+  console.log(code);
+  helper.sendEmail(email,code);
+  verificationcode=code;
+  res.status(200).json({message:"Verification code send"});
 })
 router.get('/verify/:code',async(req,res)=>{
   const code=req.params.code
@@ -54,7 +37,7 @@ router.get('/verify/:code',async(req,res)=>{
     return res.status(200).json({message:"Verification Successfull"})
   }
   else{
-    return res.status(400).json({message:"Verification Failed"})
+    return res.status(200).json({message:"Verification Failed"})
   }
 })
 //*LOGIN USER
